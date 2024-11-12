@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "ngx-event-hub": {
+      "projectType": "library",
+      "root": "projects/ngx-event-hub",
+      "sourceRoot": "projects/ngx-event-hub/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/ngx-event-hub/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-event-hub/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-event-hub/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-event-hub/src/test.ts",
+            "tsConfig": "projects/ngx-event-hub/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-event-hub/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}
