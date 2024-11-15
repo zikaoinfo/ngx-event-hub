@@ -4,14 +4,24 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NgxEventHubService {
-  eventsMap: Map<string,(data?: {}) => void> = new Map();
+  eventsMap: Map<string,[(data?: {}) => void]> = new Map();
   constructor() { }
   on(eventName: string, callbackFn: (data?: {}) => void) {
-    this.eventsMap.set(eventName, callbackFn);
+    let calbbacksForEvent = this.eventsMap.get(eventName)
+    if(calbbacksForEvent) {
+      calbbacksForEvent.push(callbackFn)
+    } else {
+      calbbacksForEvent = [callbackFn];
+      this.eventsMap.set(eventName, calbbacksForEvent);
+    }
   }
   
 
   cast(eventName: string, data?: {} | undefined) {
-    this.eventsMap.get(eventName)?.(data)
+    let callbacks = this.eventsMap.get(eventName) || [];
+
+    for(let callback of callbacks) {
+      callback?.(data);
+    }
   }
 }

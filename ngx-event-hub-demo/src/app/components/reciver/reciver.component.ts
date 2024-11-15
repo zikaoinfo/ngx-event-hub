@@ -18,5 +18,8 @@ export class ReciverComponent implements OnInit {
     this.eventHub.on('test', (data: any) => {
       this.data = data;
     })
+    this.eventHub.on('test', (data: any) => {
+      console.log('doing different thing')
+    })
   }
 }

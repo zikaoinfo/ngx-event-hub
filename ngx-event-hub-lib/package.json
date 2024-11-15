@@ -1,6 +1,6 @@
 {
   "name": "ngx-event-hub-lib",
-  "version": "0.0.2-alpha",
+  "version": "0.0.2-beta",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
