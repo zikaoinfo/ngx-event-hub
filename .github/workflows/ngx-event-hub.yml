@@ -12,22 +12,17 @@ on:
 jobs:
   build-release:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [23.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: Setup ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Install lib Dependencies
       working-directory: ./ngx-event-hub-lib
-      run: npm install
+      run: npm ci
     - name: build lib
       working-directory: ./ngx-event-hub-lib
       run: npm build
