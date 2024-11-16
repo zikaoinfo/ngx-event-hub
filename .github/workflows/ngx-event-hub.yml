@@ -21,7 +21,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install lib Dependencies
       working-directory: ./ngx-event-hub-lib
-      run: npm ci
+      run: npm install
     - name: build lib
       working-directory: ./ngx-event-hub-lib
       run: ./node_modules/.bin/ng build
