@@ -24,7 +24,7 @@ jobs:
       run: npm ci
     - name: build lib
       working-directory: ./ngx-event-hub-lib
-      run: npm build
+      run: npm run build
     - name: publish lib
       working-directory: ./dist/ngx-event-hub
       run: npm publish
