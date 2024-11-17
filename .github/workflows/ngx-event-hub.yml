@@ -32,6 +32,9 @@ jobs:
     - name: build lib
       working-directory: ./ngx-event-hub-lib
       run: npm build
+    - name: Set npm registry
+      run: npm config set registry https://registry.npmjs.org/
+  
     - name: publish lib
       working-directory: ./dist/ngx-event-hub
       run: npm publish
