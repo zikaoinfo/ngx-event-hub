@@ -27,6 +27,8 @@ jobs:
     - name: build lib
       working-directory: ./ngx-event-hub-lib
       run: ./node_modules/.bin/ng build
+    - name: Set npm registry
+      run: npm config set registry https://registry.npmjs.org/
     - name: publish lib
       run: | 
         echo $NODE_AUTH_TOKEN
