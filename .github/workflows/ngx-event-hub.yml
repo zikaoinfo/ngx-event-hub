@@ -19,9 +19,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install lib Dependencies
+    - name: install dependencies
       working-directory: ./ngx-event-hub-lib
-      run: npm install
+      run: |
+        rm -rf node_modules package-lock.json
+        npm install
     - name: build lib
       working-directory: ./ngx-event-hub-lib
       run: ./node_modules/.bin/ng build
