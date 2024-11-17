@@ -28,7 +28,7 @@ jobs:
       working-directory: ./ngx-event-hub-lib
       run: ./node_modules/.bin/ng build
     - name: publish lib
-      working-directory: ./dist/ngx-event-hub
+      working-directory: ./ngx-event-hub-lib/dist/ngx-event-hub
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
