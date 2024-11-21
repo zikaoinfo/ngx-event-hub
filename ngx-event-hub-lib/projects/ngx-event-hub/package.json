@@ -1,6 +1,6 @@
 {
   "name": "ngx-event-hub",
-  "version": "0.0.2-beta",
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0"
