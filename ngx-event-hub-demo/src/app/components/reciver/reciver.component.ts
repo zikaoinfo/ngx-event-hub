@@ -6,20 +6,15 @@ import { NgxEventHubService } from 'ngx-event-hub';
   standalone: true,
   imports: [],
   templateUrl: './reciver.component.html',
-  styleUrl: './reciver.component.css'
+  styleUrl: './reciver.component.css',
 })
 export class ReciverComponent implements OnInit {
   data: string = '';
-  constructor(private eventHub: NgxEventHubService) {
-
-  }
+  constructor(private eventHub: NgxEventHubService) {}
 
   ngOnInit(): void {
     this.eventHub.on('test', (data: any) => {
       this.data = data;
-    })
-    this.eventHub.on('test', (data: any) => {
-      console.log('doing different thing')
-    })
+    });
   }
 }
