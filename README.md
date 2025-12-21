@@ -1,0 +1,96 @@
+# NgxEventHub
+
+⚡ A lightweight, zero-dependency Angular service for event-driven communication between components.
+
+## 🚀 Quick Links
+
+- **📚 [Full Documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md)** - Complete API reference and examples
+- **🎮 [Live Demo](./ngx-event-hub-demo)** - Interactive examples with all features
+- **📦 [NPM Package](https://www.npmjs.com/package/ngx-event-hub)**
+
+## ✨ Features
+
+- ✅ Simple `on()` and `cast()` API
+- ✅ Auto-cleanup with DestroyRef integration (Angular 16+)
+- ✅ Performance optimizations (throttle, debounce, distinct)
+- ✅ Scoped hubs for feature isolation
+- ✅ Debug mode and inspection tools
+- ✅ Zero dependencies (no RxJS required)
+- ✅ Full TypeScript support
+- ✅ Per-event data isolation
+- ✅ Error handling and isolation
+
+## 📦 Installation
+
+```bash
+npm install ngx-event-hub
+```
+
+## 🎯 Quick Start
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { NgxEventHubService } from 'ngx-event-hub';
+
+@Component({
+  selector: 'app-example',
+  template: `<button (click)="send()">Send Event</button>`
+})
+export class ExampleComponent implements OnInit {
+  constructor(private eventHub: NgxEventHubService) {}
+
+  ngOnInit(): void {
+    this.eventHub.on('myEvent', (data) => {
+      console.log('Received:', data);
+    });
+  }
+
+  send(): void {
+    this.eventHub.cast('myEvent', 'Hello!');
+  }
+}
+```
+
+## 📖 Documentation
+
+See the [full documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md) for:
+- Complete API reference
+- Advanced features (throttle, debounce, scoped hubs, etc.)
+- Usage examples
+- Best practices
+
+## 🎮 Demo
+
+**🔗 [View Live Demo](https://zikaoinfo.github.io/ngx-event-hub/)**
+
+Or run the demo app locally:
+
+```bash
+cd ngx-event-hub-demo
+npm install
+npm start
+```
+
+The demo includes:
+- Interactive examples for all features
+- Code snippets with HTML/TypeScript/Preview tabs
+- Beautiful flat design UI
+- Navigation with scroll spy
+
+## 📁 Project Structure
+
+```
+ngx-event-hub/
+├── ngx-event-hub-lib/          # Library source
+│   └── projects/
+│       └── ngx-event-hub/
+└── ngx-event-hub-demo/          # Demo application
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+MIT License

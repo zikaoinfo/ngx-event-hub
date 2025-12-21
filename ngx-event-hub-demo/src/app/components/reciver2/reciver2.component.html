@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">📥 Receiver #2</div>
+      <p class="card-description">Independent listener with history tracking</p>
+    </div>
+    <span class="badge badge-secondary">listening</span>
+  </div>
+  
+  <div class="receiver-content">
+    <div class="receiver-label">Previous Data:</div>
+    <div class="receiver-value" [class.has-data]="previousData">
+      {{ previousData || 'No previous events' }}
+    </div>
+  </div>
+  
+  <div class="text-muted mt-2">
+    Event: <strong>test</strong> • Tracks the previous value from events
+  </div>
+</div>
