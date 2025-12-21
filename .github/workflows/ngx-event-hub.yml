@@ -11,32 +11,28 @@ on:
 
 jobs:
   build-release:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [23.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: Setup ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Install lib Dependencies
+    - name: install dependencies
       working-directory: ./ngx-event-hub-lib
-      run: npm ci
+      run: |
+        rm -rf node_modules package-lock.json
+        npm install
     - name: build lib
       working-directory: ./ngx-event-hub-lib
-      run: npm build
+      run: ./node_modules/.bin/ng build
     - name: Set npm registry
       run: npm config set registry https://registry.npmjs.org/
-  
     - name: publish lib
-      working-directory: ./dist/ngx-event-hub
-      run: npm publish
+      run: | 
+        echo $NODE_AUTH_TOKEN
+        npm whoami
+      working-directory: ./ngx-event-hub-lib/dist/ngx-event-hub
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
