@@ -14,7 +14,6 @@ on:
     paths:
       - 'ngx-event-hub-lib/**'
       - '.github/workflows/ngx-event-hub.yml'
-
 jobs:
   build-release:
 
