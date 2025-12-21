@@ -4,19 +4,21 @@
 
 ## 🚀 Quick Links
 
-- **📚 [Full Documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md)**
+- **📚 [Full Documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md)** - Complete API reference and examples
 - **🎮 [Live Demo](./ngx-event-hub-demo)** - Interactive examples with all features
 - **📦 [NPM Package](https://www.npmjs.com/package/ngx-event-hub)**
 
 ## ✨ Features
 
 - ✅ Simple `on()` and `cast()` API
-- ✅ Auto-cleanup with DestroyRef integration
+- ✅ Auto-cleanup with DestroyRef integration (Angular 16+)
 - ✅ Performance optimizations (throttle, debounce, distinct)
 - ✅ Scoped hubs for feature isolation
 - ✅ Debug mode and inspection tools
 - ✅ Zero dependencies (no RxJS required)
 - ✅ Full TypeScript support
+- ✅ Per-event data isolation
+- ✅ Error handling and isolation
 
 ## 📦 Installation
 
@@ -32,7 +34,7 @@ import { NgxEventHubService } from 'ngx-event-hub';
 
 @Component({
   selector: 'app-example',
-  template: `<button (click)="send()">Send</button>`
+  template: `<button (click)="send()">Send Event</button>`
 })
 export class ExampleComponent implements OnInit {
   constructor(private eventHub: NgxEventHubService) {}
@@ -67,7 +69,11 @@ npm install
 npm start
 ```
 
-Or view the live demo at: [Demo URL]
+The demo includes:
+- Interactive examples for all features
+- Code snippets with HTML/TypeScript/Preview tabs
+- Beautiful flat design UI
+- Navigation with scroll spy
 
 ## 📁 Project Structure
 
