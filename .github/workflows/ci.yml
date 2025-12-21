@@ -1,0 +1,97 @@
+name: CI Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-library:
+    name: Build Library
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: ngx-event-hub-lib/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./ngx-event-hub-lib
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm install)
+
+      - name: Build library
+        working-directory: ./ngx-event-hub-lib
+        run: npm run build
+
+  build-demo:
+    name: Build Demo
+    runs-on: ubuntu-latest
+    needs: build-library
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install library dependencies
+        working-directory: ./ngx-event-hub-lib
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm install)
+
+      - name: Build library
+        working-directory: ./ngx-event-hub-lib
+        run: npm run build
+
+      - name: Install demo dependencies
+        working-directory: ./ngx-event-hub-demo
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm install)
+
+      - name: Build demo app
+        working-directory: ./ngx-event-hub-demo
+        run: npm run build -- --configuration production
+
+  lint-check:
+    name: Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install library dependencies
+        working-directory: ./ngx-event-hub-lib
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm install)
+
+      - name: Install demo dependencies
+        working-directory: ./ngx-event-hub-demo
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm install)
+
+      - name: Type check library
+        working-directory: ./ngx-event-hub-lib
+        run: npx tsc --noEmit -p projects/ngx-event-hub/tsconfig.lib.json
+
+      - name: Type check demo
+        working-directory: ./ngx-event-hub-demo
+        run: npx tsc --noEmit
+
