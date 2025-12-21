@@ -352,7 +352,7 @@ Clear listeners for an event (or all events if no name provided).
 
 Check out the interactive demo with all features:
 
-🔗 **Live Demo**: [View Demo App](https://your-demo-url.com)
+🔗 **Live Demo**: [View Demo App](https://zikaoinfo.github.io/ngx-event-hub/)
 
 The demo includes:
 - Basic event communication

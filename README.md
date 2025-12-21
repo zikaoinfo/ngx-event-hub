@@ -61,7 +61,9 @@ See the [full documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.m
 
 ## 🎮 Demo
 
-Run the demo app locally:
+**🔗 [View Live Demo](https://zikaoinfo.github.io/ngx-event-hub/)**
+
+Or run the demo app locally:
 
 ```bash
 cd ngx-event-hub-demo
