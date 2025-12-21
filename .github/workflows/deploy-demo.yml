@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'ngx-event-hub-demo/**'
+      - 'ngx-event-hub-lib/**'
       - '.github/workflows/deploy-demo.yml'
   workflow_dispatch:
 
@@ -33,7 +34,6 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-          cache-dependency-path: ngx-event-hub-demo/package-lock.json
 
       - name: Install library dependencies
         working-directory: ./ngx-event-hub-lib
@@ -47,9 +47,9 @@ jobs:
         working-directory: ./ngx-event-hub-demo
         run: npm ci
 
-      - name: Build demo app
+      - name: Build demo app for GitHub Pages
         working-directory: ./ngx-event-hub-demo
-        run: npm run build -- --base-href /ngx-event-hub/
+        run: npm run build -- --configuration production --base-href /ngx-event-hub/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
