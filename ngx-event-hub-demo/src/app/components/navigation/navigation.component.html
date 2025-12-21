@@ -1,0 +1,45 @@
+<nav class="navigation" [class.open]="isOpen">
+  <div class="nav-header">
+    <h3 class="nav-title">⚡ NgxEventHub</h3>
+    <p class="nav-subtitle">Navigation</p>
+  </div>
+
+  <div class="nav-content">
+    <div *ngFor="let item of navItems" class="nav-section">
+      <button 
+        class="nav-section-header"
+        (click)="item.children && toggleSection(item.id)"
+        [class.has-children]="item.children"
+      >
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+        <span *ngIf="item.children" class="nav-chevron" [class.expanded]="isExpanded(item.id)">
+          ▼
+        </span>
+      </button>
+
+      <div *ngIf="item.children && isExpanded(item.id)" class="nav-children">
+        <button
+          *ngFor="let child of item.children"
+          class="nav-item"
+          [class.active]="isSectionActive(child.id)"
+          (click)="scrollToSection(child.id)"
+        >
+          <span class="nav-icon">{{ child.icon }}</span>
+          <span class="nav-label">{{ child.label }}</span>
+        </button>
+      </div>
+
+      <button
+        *ngIf="!item.children"
+        class="nav-item nav-item-top-level"
+        [class.active]="isSectionActive(item.id)"
+        (click)="scrollToSection(item.id)"
+      >
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+      </button>
+    </div>
+  </div>
+</nav>
+

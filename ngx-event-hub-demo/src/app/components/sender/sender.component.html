@@ -1,6 +1,32 @@
-
-<fieldset>
-    <legend>Component sending</legend>
-to send: <input [(ngModel)] = "dataTosend" type="text" />
-<button (click) = "triggerEvent()">Send</button>
-</fieldset> 
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">📤 Event Sender</div>
+      <p class="card-description">Broadcast events to all registered listeners</p>
+    </div>
+    <span class="badge">sender</span>
+  </div>
+  
+  <div class="form-group">
+    <label for="eventData" class="form-label">Event Data</label>
+    <input 
+      id="eventData"
+      type="text" 
+      [(ngModel)]="dataTosend" 
+      placeholder="Enter message to send..."
+      (keyup.enter)="triggerEvent()"
+    />
+  </div>
+  
+  <button 
+    class="btn btn-primary" 
+    (click)="triggerEvent()"
+    [disabled]="!dataTosend.trim()"
+  >
+    Send Event
+  </button>
+  
+  <div class="text-muted mt-2">
+    Event: <strong>test</strong> • All receivers will get this data instantly
+  </div>
+</div>

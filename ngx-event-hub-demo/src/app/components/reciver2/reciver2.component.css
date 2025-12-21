@@ -1,0 +1,50 @@
+.receiver-content {
+  padding: 24px;
+  background: var(--secondary-light);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.receiver-content:has(.has-data) {
+  background: #FFF3E0;
+  border-color: var(--secondary);
+  animation: highlight 0.5s ease;
+}
+
+.receiver-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.receiver-value {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-light);
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.receiver-value.has-data {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@keyframes highlight {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+

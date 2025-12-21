@@ -1,4 +1,20 @@
-<fieldset>
-    <legend>Reciver Component</legend>
-    I got <b>{{data}}</b> from the other component
-</fieldset> 
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">📥 Receiver #1</div>
+      <p class="card-description">Listening for events in real-time</p>
+    </div>
+    <span class="badge badge-success">listening</span>
+  </div>
+  
+  <div class="receiver-content">
+    <div class="receiver-label">Received Data:</div>
+    <div class="receiver-value" [class.has-data]="data">
+      {{ data || 'Waiting for events...' }}
+    </div>
+  </div>
+  
+  <div class="text-muted mt-2">
+    Event: <strong>test</strong> • Updates automatically when events are sent
+  </div>
+</div>
