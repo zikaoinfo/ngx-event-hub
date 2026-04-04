@@ -1,3 +1,142 @@
-<app-sender></app-sender>
-<app-reciver></app-reciver>
-<app-reciver2></app-reciver2>
+<div class="app-wrapper">
+  <!-- Navigation -->
+  <app-navigation #navigation (menuStateChange)="isMobileMenuOpen = $event"></app-navigation>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle menu">
+      <span class="hamburger" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <!-- Overlay for mobile menu -->
+    <div class="menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1>⚡ NgxEventHub</h1>
+        <p class="header-description">
+          A lightweight Angular service for event-driven communication between components. 
+          Explore the examples below to see how easy it is to create and manage custom events.
+        </p>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Section 1: Basic Event Communication -->
+      <section id="basic-event-communication" class="section">
+        <h2 class="section-title">Basic Event Communication</h2>
+        <p class="section-description">
+          Send messages between components using simple event broadcasting. One component sends an event, 
+          and any component listening will receive it instantly.
+        </p>
+        <div class="grid-2">
+          <app-sender></app-sender>
+          <app-reciver></app-reciver>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Section 2: Multiple Receivers -->
+      <section id="multiple-receivers" class="section">
+        <h2 class="section-title">Multiple Receivers</h2>
+        <p class="section-description">
+          Events can be broadcast to multiple listeners simultaneously. Each receiver processes 
+          the same event independently, allowing for flexible component communication.
+        </p>
+        <div class="grid-2">
+          <app-reciver2></app-reciver2>
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📡 Broadcast Pattern</div>
+                <p class="card-description">
+                  The same event reaches all registered listeners at once, enabling 
+                  one-to-many communication patterns.
+                </p>
+              </div>
+            </div>
+            <div class="text-muted">
+              Send a message using the "Basic Event Communication" section above to see 
+              both receivers update simultaneously.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Section 3: Real-time Counter -->
+      <section id="real-time-counter" class="section">
+        <h2 class="section-title">Real-time Counter</h2>
+        <p class="section-description">
+          Events can carry data of any type. This example shows numeric events being 
+          used to update a counter in real-time.
+        </p>
+        <div class="grid">
+          <app-counter></app-counter>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💡 Use Cases</div>
+            </div>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                <strong>Live Statistics:</strong> Update counters, scores, or metrics across the app
+              </li>
+              <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                <strong>Progress Tracking:</strong> Synchronize progress bars and indicators
+              </li>
+              <li style="padding: 8px 0;">
+                <strong>Real-time Updates:</strong> Keep dashboards synchronized with latest data
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Section 4: Activity Tracker -->
+      <section id="activity-tracker" class="section">
+        <h2 class="section-title">Activity Tracker</h2>
+        <p class="section-description">
+          Track and log all events in your application. Perfect for debugging, analytics, 
+          or creating an event history viewer.
+        </p>
+        <div class="grid">
+          <app-user-activity></app-user-activity>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Section 5: Code Examples -->
+      <section id="code-examples" class="section">
+        <app-code-examples></app-code-examples>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Section 6: Advanced Examples -->
+      <section id="advanced-examples" class="section">
+        <app-advanced-examples></app-advanced-examples>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p class="text-muted text-center">
+          NgxEventHub Demo • Built with Angular • 
+          <a href="https://github.com" style="color: var(--primary); text-decoration: none;">View Documentation</a>
+        </p>
+      </footer>
+    </div>
+  </main>
+</div>

@@ -6,9 +6,14 @@ name: ngx-event-hub publish to npm
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'ngx-event-hub-lib/**'
+      - '.github/workflows/ngx-event-hub.yml'
   pull_request:
     branches: [ "main" ]
-
+    paths:
+      - 'ngx-event-hub-lib/**'
+      - '.github/workflows/ngx-event-hub.yml'
 jobs:
   build-release:
 
@@ -28,15 +33,17 @@ jobs:
         cache: 'npm'
     - name: Install lib Dependencies
       working-directory: ./ngx-event-hub-lib
-      run: npm ci
+      run: |
+        npm ci || (rm -rf node_modules package-lock.json && npm install)
     - name: build lib
       working-directory: ./ngx-event-hub-lib
-      run: npm build
+      run: npm run build
     - name: Set npm registry
       run: npm config set registry https://registry.npmjs.org/
   
     - name: publish lib
-      working-directory: ./dist/ngx-event-hub
+      working-directory: ./ngx-event-hub-lib/dist/ngx-event-hub
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'

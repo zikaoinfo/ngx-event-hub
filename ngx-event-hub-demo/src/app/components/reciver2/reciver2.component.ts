@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgxEventHubService } from 'ngx-event-hub';
 
 @Component({
@@ -8,7 +8,7 @@ import { NgxEventHubService } from 'ngx-event-hub';
   templateUrl: './reciver2.component.html',
   styleUrl: './reciver2.component.css'
 })
-export class Reciver2Component {
+export class Reciver2Component implements OnInit {
   previousData: string = '';
   constructor(private eventHub: NgxEventHubService) {}
 

@@ -1,0 +1,63 @@
+.counter-display {
+  text-align: center;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, var(--primary-light) 0%, #FFFFFF 100%);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  border: 2px solid var(--border);
+}
+
+.counter-value {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.counter-value.pulse {
+  animation: pulse 0.3s ease;
+}
+
+.counter-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.counter-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.counter-time {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.counter-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .counter-value {
+    font-size: 48px;
+  }
+}

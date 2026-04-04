@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">📊 Activity Tracker</div>
+      <p class="card-description">Log of all events in the application</p>
+    </div>
+    <span class="badge">{{ activities.length }}</span>
+  </div>
+  
+  <div class="activity-list" *ngIf="activities.length > 0">
+    <div *ngFor="let activity of activities" class="activity-item fade-in">
+      <div class="activity-content">
+        <div class="activity-action">{{ activity.action }}</div>
+        <div class="activity-time">{{ formatTime(activity.timestamp) }}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="activity-empty" *ngIf="activities.length === 0">
+    <div class="empty-icon">📭</div>
+    <div class="empty-text">No activities tracked yet</div>
+    <div class="empty-hint">Send events using the sections above to see them here</div>
+  </div>
+  
+  <div class="activity-footer">
+    <button 
+      class="btn btn-danger btn-small" 
+      (click)="clearActivities()"
+      *ngIf="activities.length > 0"
+    >
+      Clear All
+    </button>
+    <div class="text-muted mt-2">
+      Tracks: <strong>userAction</strong>, <strong>test</strong>, and <strong>counter</strong> events • 
+      Max {{ maxActivities }} entries
+    </div>
+  </div>
+</div>

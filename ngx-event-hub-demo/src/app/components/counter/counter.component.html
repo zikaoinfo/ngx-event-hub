@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">🔢 Real-time Counter</div>
+      <p class="card-description">Increments based on numeric event values</p>
+    </div>
+    <span class="badge badge-secondary">counter</span>
+  </div>
+  
+  <div class="counter-display">
+    <div class="counter-value" [class.pulse]="shouldPulse()">
+      {{ count }}
+    </div>
+    <div class="counter-meta" *ngIf="lastUpdate">
+      <span class="counter-label">Last updated:</span>
+      <span class="counter-time">{{ formatTime(lastUpdate) }}</span>
+    </div>
+    <div class="counter-meta" *ngIf="!lastUpdate">
+      <span class="counter-label text-muted">Waiting for counter events...</span>
+    </div>
+  </div>
+  
+  <div class="counter-actions">
+    <button class="btn btn-secondary btn-small" (click)="increment(1)">
+      +1
+    </button>
+    <button class="btn btn-secondary btn-small" (click)="increment(5)">
+      +5
+    </button>
+    <button class="btn btn-secondary btn-small" (click)="increment(10)">
+      +10
+    </button>
+    <button class="btn btn-danger btn-small" (click)="reset()">
+      Reset
+    </button>
+  </div>
+  
+  <div class="text-muted mt-2">
+    Event: <strong>counter</strong> • Accepts numeric values to increment
+  </div>
+</div>
+

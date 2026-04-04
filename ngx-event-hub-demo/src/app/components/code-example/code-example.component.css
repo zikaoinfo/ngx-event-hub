@@ -1,0 +1,160 @@
+.code-example-card {
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin: -24px -24px 24px -24px;
+  background: var(--background);
+  padding: 0 24px;
+}
+
+.tab-button {
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  outline: none;
+}
+
+.tab-button:hover {
+  color: var(--text-primary);
+  background: var(--primary-light);
+}
+
+.tab-button.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: transparent;
+}
+
+.tab-content {
+  min-height: 300px;
+}
+
+.code-block {
+  background: #1e1e1e;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #252526;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.code-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.copy-button {
+  background: transparent;
+  border: 1px solid #3e3e42;
+  color: #cccccc;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+  background: #3e3e42;
+  color: white;
+  border-color: #007acc;
+}
+
+pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  background: #1e1e1e;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+code {
+  color: #d4d4d4;
+  white-space: pre;
+}
+
+code.html {
+  color: #d4d4d4;
+}
+
+code.typescript {
+  color: #d4d4d4;
+}
+
+/* Syntax highlighting for HTML */
+code.html :deep(.tag) {
+  color: #569cd6;
+}
+
+code.html :deep(.attr-name) {
+  color: #9cdcfe;
+}
+
+code.html :deep(.attr-value) {
+  color: #ce9178;
+}
+
+code.html :deep(.comment) {
+  color: #6a9955;
+}
+
+/* Syntax highlighting for TypeScript */
+code.typescript :deep(.keyword) {
+  color: #569cd6;
+}
+
+code.typescript :deep(.string) {
+  color: #ce9178;
+}
+
+code.typescript :deep(.function) {
+  color: #dcdcaa;
+}
+
+code.typescript :deep(.comment) {
+  color: #6a9955;
+  font-style: italic;
+}
+
+code.typescript :deep(.number) {
+  color: #b5cea8;
+}
+
+.preview-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.preview-content {
+  padding: 24px;
+  background: var(--card-bg);
+  min-height: 200px;
+}
+
+/* Simple syntax highlighting with regex-based approach won't work with Angular binding */
+/* Using basic styling for now, can be enhanced with a syntax highlighter library */
+

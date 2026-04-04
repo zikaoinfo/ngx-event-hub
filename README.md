@@ -1,105 +1,96 @@
+# NgxEventHub
 
-# NgxEventHubService
+⚡ A lightweight, zero-dependency Angular service for event-driven communication between components.
 
-A lightweight Angular service for event handling within your application. The `NgxEventHubService` allows you to create and manage custom events efficiently using a simple `on` and `cast` API.
+## 🚀 Quick Links
 
-## Features
+- **📚 [Full Documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md)** - Complete API reference and examples
+- **🎮 [Live Demo](./ngx-event-hub-demo)** - Interactive examples with all features
+- **📦 [NPM Package](https://www.npmjs.com/package/ngx-event-hub)**
 
-- Register custom events with a unique name.
-- Broadcast (cast) events with optional data to listeners.
-- Supports event unsubscription.
+## ✨ Features
 
-## Installation
+- ✅ Simple `on()` and `cast()` API
+- ✅ Auto-cleanup with DestroyRef integration (Angular 16+)
+- ✅ Performance optimizations (throttle, debounce, distinct)
+- ✅ Scoped hubs for feature isolation
+- ✅ Debug mode and inspection tools
+- ✅ Zero dependencies (no RxJS required)
+- ✅ Full TypeScript support
+- ✅ Per-event data isolation
+- ✅ Error handling and isolation
 
-Install the library using npm:
+## 📦 Installation
 
 ```bash
 npm install ngx-event-hub
 ```
 
-## Setup
-
-1. Import the service in your Angular project.
-
-   ```typescript
-   import { NgxEventHubService } from 'ngx-event-hub';
-   ```
-
-2. Inject the service into your component or service where you want to use it.
-
-   ```typescript
-   import { Component, OnInit } from '@angular/core';
-   import { NgxEventHubService } from 'ngx-event-hub';
-
-   @Component({
-     selector: 'app-sample',
-     template: `<h1>Event Hub Demo</h1>`
-   })
-   export class SampleComponent implements OnInit {
-     constructor(private eventHub: NgxEventHubService) {}
-
-     ngOnInit(): void {
-       // Register an event listener
-       this.eventHub.on('myEvent', (data) => {
-         console.log('Event received with data:', data);
-       });
-     }
-
-     triggerEvent() {
-       // Trigger the event and pass data to listeners
-       this.eventHub.cast('myEvent', { key: 'value' });
-     }
-   }
-   ```
-
-## Usage
-
-### Register an Event Listener
-
-To listen for events, use the `on` method. This method takes two arguments:
-
-- `eventName` - The name of the event to listen for.
-- `callbackFn` - A function to execute when the event is triggered.
+## 🎯 Quick Start
 
 ```typescript
-this.eventHub.on('eventName', (data) => {
-  console.log('Event data:', data);
-});
-```
-
-### Trigger an Event
-
-To trigger an event and optionally send data to listeners, use the `cast` method:
-
-```typescript
-this.eventHub.cast('eventName', { yourData: 'example' });
-```
-
-### Example
-
-Here's a complete example of using `NgxEventHubService`:
-
-```typescript
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgxEventHubService } from 'ngx-event-hub';
 
 @Component({
-  selector: 'app-root',
-  template: `<button (click)="sendEvent()">Send Event</button>`,
+  selector: 'app-example',
+  template: `<button (click)="send()">Send Event</button>`
 })
-export class AppComponent {
-  constructor(private eventHub: NgxEventHubService) {
-    this.eventHub.on('customEvent', (data) => {
-      console.log('Received customEvent with data:', data);
+export class ExampleComponent implements OnInit {
+  constructor(private eventHub: NgxEventHubService) {}
+
+  ngOnInit(): void {
+    this.eventHub.on('myEvent', (data) => {
+      console.log('Received:', data);
     });
   }
 
-  sendEvent() {
-    this.eventHub.cast('customEvent', { message: 'Hello from NgxEventHubService!' });
+  send(): void {
+    this.eventHub.cast('myEvent', 'Hello!');
   }
 }
 ```
 
-## License
+## 📖 Documentation
 
-This project is licensed under the MIT License.
+See the [full documentation](./ngx-event-hub-lib/projects/ngx-event-hub/README.md) for:
+- Complete API reference
+- Advanced features (throttle, debounce, scoped hubs, etc.)
+- Usage examples
+- Best practices
+
+## 🎮 Demo
+
+**🔗 [View Live Demo](https://zikaoinfo.github.io/ngx-event-hub/)**
+
+Or run the demo app locally:
+
+```bash
+cd ngx-event-hub-demo
+npm install
+npm start
+```
+
+The demo includes:
+- Interactive examples for all features
+- Code snippets with HTML/TypeScript/Preview tabs
+- Beautiful flat design UI
+- Navigation with scroll spy
+
+## 📁 Project Structure
+
+```
+ngx-event-hub/
+├── ngx-event-hub-lib/          # Library source
+│   └── projects/
+│       └── ngx-event-hub/
+└── ngx-event-hub-demo/          # Demo application
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+MIT License

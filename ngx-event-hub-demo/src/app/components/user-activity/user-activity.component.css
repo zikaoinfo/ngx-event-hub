@@ -1,0 +1,98 @@
+.activity-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin: -24px;
+  padding: 24px;
+}
+
+.activity-item {
+  padding: 16px;
+  background: var(--background);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  border-left: 3px solid var(--primary);
+  transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+  background: var(--primary-light);
+  transform: translateX(4px);
+}
+
+.activity-item:last-child {
+  margin-bottom: 0;
+}
+
+.activity-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.activity-action {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.activity-time {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-top: 2px;
+}
+
+.activity-empty {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.empty-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.activity-footer {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* Scrollbar styling */
+.activity-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.activity-list::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-light);
+}
