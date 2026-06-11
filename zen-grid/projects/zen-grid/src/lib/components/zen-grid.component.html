@@ -1,0 +1,488 @@
+<!-- Screen reader announcements (sort/filter/selection changes). -->
+<div class="zen-sr-only" aria-live="polite" role="status">{{ announcement() }}</div>
+
+<!-- ════════════════ HEADER ════════════════ -->
+<div class="zen-header" role="rowgroup">
+  <!-- Group header rows (multi-level headers). -->
+  @for (groupRow of headerGroupRows(); track $index) {
+    <div class="zen-header-row zen-header-group-row" role="row" [style.height.px]="headerHeight()">
+      @if (checkboxColumn()) {
+        <div class="zen-header-cell zen-checkbox-cell" [style.width.px]="40"></div>
+      }
+      <div class="zen-header-center-clip">
+        <div class="zen-header-track" [style.transform]="'translateX(' + (-viewport.scrollLeft()) + 'px)'">
+          @for (cell of groupRow; track cell.colId) {
+            <div class="zen-header-cell zen-header-group" role="columnheader" [style.width.px]="cell.width">
+              <span class="zen-header-label">{{ cell.label }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Leaf header row. -->
+  <div class="zen-header-row" role="row" [style.height.px]="headerHeight()">
+    @if (checkboxColumn()) {
+      <div class="zen-header-cell zen-checkbox-cell" [style.width.px]="40">
+        <input
+          type="checkbox"
+          aria-label="Select all rows"
+          [checked]="selection.headerCheckboxState() === 'all'"
+          [indeterminate]="selection.headerCheckboxState() === 'some'"
+          (change)="toggleHeaderCheckbox()"
+        />
+      </div>
+    }
+
+    <!-- Pinned-left leaf headers. -->
+    @for (slot of leftCells(); track slot.colId) {
+      <ng-container
+        [ngTemplateOutlet]="leafHeader"
+        [ngTemplateOutletContext]="{ $implicit: slot }"
+      />
+    }
+
+    <!-- Center leaf headers, horizontally synced with the body. -->
+    <div class="zen-header-center-clip">
+      <div
+        class="zen-header-track"
+        [style.width.px]="columns.totalCenterWidth()"
+        [style.transform]="'translateX(' + (-viewport.scrollLeft()) + 'px)'"
+      >
+        @for (slot of centerSlice(); track slot.colId) {
+          <div class="zen-header-abs" [style.left.px]="slot.left" [style.width.px]="slot.width">
+            <ng-container
+              [ngTemplateOutlet]="leafHeader"
+              [ngTemplateOutletContext]="{ $implicit: slot }"
+            />
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Pinned-right leaf headers. -->
+    @for (slot of rightCells(); track slot.colId) {
+      <ng-container
+        [ngTemplateOutlet]="leafHeader"
+        [ngTemplateOutletContext]="{ $implicit: slot }"
+      />
+    }
+  </div>
+</div>
+
+<ng-template #leafHeader let-slot>
+  <div
+    class="zen-header-cell"
+    role="columnheader"
+    [style.width.px]="slot.width"
+    [attr.aria-colindex]="slot.colIndex + 1"
+    [attr.aria-sort]="
+      sortIndicators().get(slot.colId)?.direction === 'asc'
+        ? 'ascending'
+        : sortIndicators().get(slot.colId)?.direction === 'desc'
+          ? 'descending'
+          : 'none'
+    "
+    [attr.title]="slot.def.headerTooltip ?? null"
+    [class.zen-sortable]="slot.def.sortable !== false"
+    [draggable]="slot.def.suppressMovable !== true"
+    (dragstart)="onHeaderDragStart(slot.colId)"
+    (dragover)="$event.preventDefault()"
+    (drop)="onHeaderDrop(slot.colId, $event)"
+    (click)="onHeaderClick(slot.def, $event)"
+  >
+    <span class="zen-header-label">{{ columns.headerNameOf(slot.colId) }}</span>
+
+    @if (sortIndicators().get(slot.colId); as sort) {
+      <span class="zen-sort-indicator">
+        {{ sort.direction === 'asc' ? themes.icon('sort-asc') : themes.icon('sort-desc') }}
+        @if (sort.multi) {
+          <sup class="zen-sort-priority">{{ sort.priority }}</sup>
+        }
+      </span>
+    }
+
+    @if (slot.def.filter !== false && slot.def.filter !== undefined) {
+      <button
+        type="button"
+        class="zen-filter-button"
+        [class.zen-filter-active]="isFilterActive(slot.colId)"
+        [attr.aria-label]="'Filter ' + columns.headerNameOf(slot.colId)"
+        (click)="openFilter(slot.colId, $event)"
+      >
+        {{ themes.icon('filter') }}
+      </button>
+    }
+
+    @if (slot.def.resizable !== false) {
+      <span
+        class="zen-resize-handle"
+        role="separator"
+        aria-orientation="vertical"
+        (pointerdown)="onResizeStart(slot.colId, $event)"
+      ></span>
+    }
+  </div>
+</ng-template>
+
+<!-- ════════════════ PINNED TOP ROWS ════════════════ -->
+@for (node of pinnedTopNodes(); track node.id) {
+  <div class="zen-row zen-pinned-row" role="row" [style.height.px]="rowHeightDefault()">
+    <ng-container
+      [ngTemplateOutlet]="rowCells"
+      [ngTemplateOutletContext]="{ $implicit: node, static: true }"
+    />
+  </div>
+}
+
+<!-- ════════════════ BODY ════════════════ -->
+<div class="zen-body">
+  <!-- Pinned-left overlay, vertically synced via transform. -->
+  @if (leftCells().length > 0 || checkboxColumn()) {
+    <div
+      class="zen-pinned-col zen-pinned-left"
+      [style.width.px]="columns.leftPinnedWidth() + (checkboxColumn() ? 40 : 0)"
+    >
+      <div [style.transform]="'translateY(' + (-viewport.scrollTop()) + 'px)'">
+        @for (slot of slots(); track slot.poolKey) {
+          <div
+            class="zen-row"
+            [class.zen-row-selected]="selection.isSelected(slot.node.id)"
+            [style.transform]="'translateY(' + slot.top + 'px)'"
+            [style.height.px]="slot.height"
+          >
+            @if (checkboxColumn() && !slot.node.isGroup) {
+              <div class="zen-cell zen-checkbox-cell" [style.width.px]="40">
+                <input
+                  type="checkbox"
+                  [attr.aria-label]="'Select row ' + (slot.rowIndex + 1)"
+                  [checked]="selection.isSelected(slot.node.id)"
+                  (change)="toggleRowCheckbox(slot.node, $event)"
+                />
+              </div>
+            }
+            @for (cell of leftCells(); track cell.colId) {
+              <ng-container
+                [ngTemplateOutlet]="bodyCell"
+                [ngTemplateOutletContext]="{ $implicit: cell, node: slot.node, absolute: false }"
+              />
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Scrolling viewport (center columns). -->
+  <div
+    #viewportEl
+    class="zen-viewport"
+    role="presentation"
+    (scroll)="onScroll($event)"
+  >
+    @if (renderMode() === 'canvas') {
+      <div
+        class="zen-spacer"
+        [style.height.px]="viewport.totalHeight()"
+        [style.width.px]="columns.totalCenterWidth()"
+      ></div>
+      <canvas #canvasEl class="zen-canvas" (click)="onCanvasClick($event)"></canvas>
+    } @else {
+      <div
+        class="zen-spacer"
+        role="rowgroup"
+        [style.height.px]="viewport.totalHeight()"
+        [style.width.px]="columns.totalCenterWidth()"
+      >
+        @for (slot of slots(); track slot.poolKey) {
+          <div
+            class="zen-row"
+            role="row"
+            [class]="rowClassFor(slot.node)"
+            [class.zen-row-selected]="selection.isSelected(slot.node.id)"
+            [class.zen-row-group]="slot.node.isGroup"
+            [class.zen-row-loading]="dataSource.isLoadingNode(slot.node)"
+            [class.zen-row-hover]="hoveredRowIndex() === slot.rowIndex"
+            [attr.aria-rowindex]="slot.rowIndex + 1"
+            [attr.aria-selected]="selection.mode !== 'none' ? selection.isSelected(slot.node.id) : null"
+            [attr.aria-level]="slot.node.level + 1"
+            [attr.aria-expanded]="slot.node.isGroup ? slot.node.expanded : null"
+            [style.transform]="'translateY(' + slot.top + 'px)'"
+            [style.height.px]="slot.height"
+            [draggable]="options().rowDragEnabled === true"
+            (dragstart)="onRowDragStart(slot.node)"
+            (dragover)="allowDrop($event)"
+            (drop)="onRowDrop(slot.node, $event)"
+            (mouseenter)="hoveredRowIndex.set(slot.rowIndex)"
+            (mouseleave)="hoveredRowIndex.set(-1)"
+            (click)="onRowClick(slot.node, $event)"
+            (dblclick)="onRowDblClick(slot.node, $event)"
+          >
+            @if (slot.node.isGroup) {
+              <!-- Group / tree parent row spans the full row width. -->
+              <div
+                class="zen-group-cell"
+                [style.padding-left.px]="12 + slot.node.level * 20"
+                [style.width.px]="columns.totalCenterWidth()"
+              >
+                <button
+                  type="button"
+                  class="zen-expand-button"
+                  [attr.aria-label]="slot.node.expanded ? 'Collapse group' : 'Expand group'"
+                  (click)="toggleTreeOrGroup(slot.node, $event)"
+                >
+                  {{ slot.node.expanded ? themes.icon('collapse') : themes.icon('expand') }}
+                </button>
+                <span class="zen-group-label">{{ groupLabel(slot.node) }}</span>
+                @if (options().grouping?.subtotals !== false) {
+                  <span class="zen-group-aggs">{{ aggSummary(slot.node) }}</span>
+                }
+              </div>
+            } @else if (dataSource.isLoadingNode(slot.node)) {
+              <div class="zen-skeleton" [style.width.px]="columns.totalCenterWidth()"></div>
+            } @else if (isFullWidthRow(slot.node) && fullWidthColDef() !== null) {
+              <div
+                class="zen-fullwidth-cell"
+                [style.width.px]="columns.totalCenterWidth()"
+                [zenCellRenderer]="fullWidthColDef()!"
+                [zenCellRendererRow]="slot.node.data"
+                [zenCellRendererRowIndex]="slot.rowIndex"
+              ></div>
+            } @else {
+              @for (cell of centerSlice(); track cell.colId) {
+                <ng-container
+                  [ngTemplateOutlet]="bodyCell"
+                  [ngTemplateOutletContext]="{ $implicit: cell, node: slot.node, absolute: true }"
+                />
+              }
+
+              <!-- Master-detail expand toggle + detail panel. -->
+              @if (detailColDef(); as dDef) {
+                <button
+                  type="button"
+                  class="zen-detail-toggle"
+                  [attr.aria-expanded]="slot.node.detailExpanded === true"
+                  [attr.aria-label]="slot.node.detailExpanded ? 'Collapse detail' : 'Expand detail'"
+                  (click)="toggleDetail(slot.node, $event)"
+                >
+                  {{ slot.node.detailExpanded ? themes.icon('collapse') : themes.icon('expand') }}
+                </button>
+                @if (slot.node.detailExpanded) {
+                  <div
+                    class="zen-detail-row"
+                    [style.top.px]="slot.height - detailHeight()"
+                    [style.height.px]="detailHeight()"
+                    [style.width.px]="columns.totalCenterWidth()"
+                    (click)="$event.stopPropagation()"
+                    [zenCellRenderer]="dDef"
+                    [zenCellRendererRow]="slot.node.data"
+                    [zenCellRendererRowIndex]="slot.rowIndex"
+                  ></div>
+                }
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Pinned-right overlay. -->
+  @if (rightCells().length > 0) {
+    <div class="zen-pinned-col zen-pinned-right" [style.width.px]="columns.rightPinnedWidth()">
+      <div [style.transform]="'translateY(' + (-viewport.scrollTop()) + 'px)'">
+        @for (slot of slots(); track slot.poolKey) {
+          <div
+            class="zen-row"
+            [class.zen-row-selected]="selection.isSelected(slot.node.id)"
+            [style.transform]="'translateY(' + slot.top + 'px)'"
+            [style.height.px]="slot.height"
+          >
+            @for (cell of rightCells(); track cell.colId) {
+              <ng-container
+                [ngTemplateOutlet]="bodyCell"
+                [ngTemplateOutletContext]="{ $implicit: cell, node: slot.node, absolute: false }"
+              />
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<!-- ════════════════ PINNED BOTTOM ROWS ════════════════ -->
+@for (node of pinnedBottomNodes(); track node.id) {
+  <div class="zen-row zen-pinned-row" role="row" [style.height.px]="rowHeightDefault()">
+    <ng-container
+      [ngTemplateOutlet]="rowCells"
+      [ngTemplateOutletContext]="{ $implicit: node, static: true }"
+    />
+  </div>
+}
+
+<!-- Shared cell template for pinned (static) rows. -->
+<ng-template #rowCells let-node>
+  @for (cell of leftCells(); track cell.colId) {
+    <ng-container
+      [ngTemplateOutlet]="bodyCell"
+      [ngTemplateOutletContext]="{ $implicit: cell, node: node, absolute: false }"
+    />
+  }
+  @for (cell of centerSlice(); track cell.colId) {
+    <ng-container
+      [ngTemplateOutlet]="bodyCell"
+      [ngTemplateOutletContext]="{ $implicit: cell, node: node, absolute: false }"
+    />
+  }
+  @for (cell of rightCells(); track cell.colId) {
+    <ng-container
+      [ngTemplateOutlet]="bodyCell"
+      [ngTemplateOutletContext]="{ $implicit: cell, node: node, absolute: false }"
+    />
+  }
+</ng-template>
+
+<!-- ════════════════ CELL ════════════════ -->
+<ng-template #bodyCell let-cell let-node="node" let-absolute="absolute">
+  <div
+    class="zen-cell"
+    role="gridcell"
+    [class]="cellClassFor(node, cell)"
+    [class.zen-cell-abs]="absolute"
+    [class.zen-cell-focused]="isFocused(node.rowIndex, cell.colId)"
+    [class.zen-cell-flash]="isFlashing(node, cell.colId)"
+    [class.zen-cell-range]="selection.isCellInRange(node.rowIndex, cell.colIndex)"
+    [class.zen-cell-editing]="isEditing(node.rowIndex, cell.colId)"
+    [style.left.px]="absolute ? cell.left : null"
+    [style.width.px]="cell.width"
+    [style]="cellStyleFor(node, cell)"
+    [attr.aria-colindex]="cell.colIndex + 1"
+    [attr.tabindex]="isFocused(node.rowIndex, cell.colId) ? 0 : -1"
+    [attr.data-row-index]="node.rowIndex"
+    [attr.data-col-id]="cell.colId"
+    [attr.title]="tooltipFor(node, cell)"
+    (click)="onCellClick(node, cell, $event)"
+    (dblclick)="onCellDblClick(node, cell)"
+    (contextmenu)="onContextMenu(node, cell, $event)"
+  >
+    @if (isEditing(node.rowIndex, cell.colId)) {
+      @if (cell.def.cellEditor; as editorType) {
+        <span class="zen-editor-host" [zenEditorHost]="editorType" [zenEditorHostParams]="editorParams(node, cell.def)"></span>
+      } @else {
+        <input
+          #defaultEditor
+          class="zen-default-editor"
+          [class.zen-editor-invalid]="editorInvalid() !== null"
+          [value]="editorInitialValue(node, cell.def)"
+          [attr.aria-invalid]="editorInvalid() !== null"
+          (blur)="stopEditing(false)"
+          (click)="$event.stopPropagation()"
+        />
+      }
+      @if (editorInvalid(); as error) {
+        <div class="zen-validation-error" role="alert">{{ error }}</div>
+      }
+    } @else {
+      <span
+        class="zen-cell-content"
+        [zenCellRenderer]="cell.def"
+        [zenCellRendererRow]="node.data"
+        [zenCellRendererRowIndex]="node.rowIndex"
+      ></span>
+    }
+  </div>
+</ng-template>
+
+<!-- ════════════════ FILTER POPUP ════════════════ -->
+@if (filterPopup(); as popup) {
+  <div class="zen-popup-backdrop" (click)="filterPopup.set(null)"></div>
+  <div
+    class="zen-filter-popup"
+    role="dialog"
+    [attr.aria-label]="'Filter ' + columns.headerNameOf(popup.colId)"
+    [style.left.px]="popup.x"
+    [style.top.px]="popup.y"
+  >
+    @if (columns.defOf(popup.colId)?.filterComponent; as customFilter) {
+      <ng-container [zenFilterHost]="customFilter" [zenFilterHostParams]="customFilterParams(popup.colId)" />
+    } @else if (columns.defOf(popup.colId)?.filter === 'set') {
+      <div class="zen-set-filter">
+        @for (value of setFilterValues(); track $index) {
+          <label class="zen-set-filter-item">
+            <input
+              type="checkbox"
+              [checked]="isSetValueActive(value)"
+              (change)="toggleSetFilterValue(value)"
+            />
+            {{ value }}
+          </label>
+        }
+      </div>
+      <div class="zen-filter-actions">
+        <button type="button" (click)="clearFilter()">Clear</button>
+        <button type="button" (click)="filterPopup.set(null)">Close</button>
+      </div>
+    } @else if (columns.defOf(popup.colId)?.filter === 'boolean') {
+      <div class="zen-filter-actions">
+        <button type="button" (click)="draftOperator.set('equals'); draftValue.set('true'); applyFilterDraft()">True</button>
+        <button type="button" (click)="draftOperator.set('equals'); draftValue.set('false'); applyFilterDraft()">False</button>
+        <button type="button" (click)="clearFilter()">Clear</button>
+      </div>
+    } @else {
+      <select
+        class="zen-filter-operator"
+        aria-label="Filter operator"
+        [value]="draftOperator()"
+        (change)="draftOperator.set($any($event.target).value)"
+      >
+        @for (op of filterOperatorsFor(popup.colId); track op) {
+          <option [value]="op">{{ op }}</option>
+        }
+      </select>
+      <input
+        class="zen-filter-input"
+        aria-label="Filter value"
+        [value]="draftValue()"
+        (input)="draftValue.set($any($event.target).value)"
+        (keydown.enter)="applyFilterDraft()"
+      />
+      @if (draftOperator() === 'inRange') {
+        <input
+          class="zen-filter-input"
+          aria-label="Filter value to"
+          placeholder="to"
+          [value]="draftValueTo()"
+          (input)="draftValueTo.set($any($event.target).value)"
+        />
+      }
+      <div class="zen-filter-actions">
+        <button type="button" class="zen-primary" (click)="applyFilterDraft()">Apply</button>
+        <button type="button" (click)="clearFilter()">Clear</button>
+      </div>
+    }
+  </div>
+}
+
+<!-- ════════════════ CONTEXT MENU ════════════════ -->
+@if (contextMenu(); as menu) {
+  <div class="zen-popup-backdrop" (click)="contextMenu.set(null)" (contextmenu)="$event.preventDefault(); contextMenu.set(null)"></div>
+  <div class="zen-context-menu" role="menu" [style.left.px]="menu.x" [style.top.px]="menu.y">
+    @for (item of menu.items; track item.label) {
+      <button type="button" role="menuitem" [disabled]="item.disabled === true" (click)="runMenuItem(item)">
+        @if (item.icon) {
+          <span class="zen-menu-icon">{{ item.icon }}</span>
+        }
+        {{ item.label }}
+      </button>
+    }
+  </div>
+}
+
+<!-- ════════════════ LOADING OVERLAY ════════════════ -->
+@if (dataSource.loading()) {
+  <div class="zen-loading-overlay" role="progressbar" aria-label="Loading rows">
+    <div class="zen-loading-spinner"></div>
+  </div>
+}

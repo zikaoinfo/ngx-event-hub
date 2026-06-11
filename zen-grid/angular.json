@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "zen-grid": {
+      "projectType": "library",
+      "root": "projects/zen-grid",
+      "sourceRoot": "projects/zen-grid/src",
+      "prefix": "zen",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/zen-grid/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/zen-grid/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/zen-grid/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  }
+}

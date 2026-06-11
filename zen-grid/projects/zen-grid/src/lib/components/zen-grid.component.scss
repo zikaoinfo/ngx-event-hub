@@ -1,0 +1,578 @@
+/*
+ * ZenGrid styles.
+ *
+ * Theming is 100% CSS custom properties (design tokens). Built-in themes
+ * (zen-arctic / zen-slate / zen-carbon) and the dark scheme only redefine
+ * tokens — layout rules never change between themes, so theme switches
+ * cost one style recalc, no layout.
+ */
+
+:host {
+  /* ── Design tokens (defaults = zen-arctic light) ───────────── */
+  --zen-font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --zen-bg: #ffffff;
+  --zen-bg-alt: #f8fafc;
+  --zen-fg: #1f2937;
+  --zen-fg-muted: #6b7280;
+  --zen-border: #e2e8f0;
+  --zen-header-bg: #f1f5f9;
+  --zen-header-fg: #334155;
+  --zen-accent: #2563eb;
+  --zen-accent-soft: #dbeafe;
+  --zen-row-hover: #f1f5f9;
+  --zen-row-selected: #dbeafe;
+  --zen-cell-padding-x: 12px;
+  --zen-flash: #fef08a;
+  --zen-error: #dc2626;
+  --zen-radius: 6px;
+  --zen-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  --zen-focus-ring: 2px solid var(--zen-accent);
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  font: var(--zen-font);
+  color: var(--zen-fg);
+  background: var(--zen-bg);
+  border: 1px solid var(--zen-border);
+  border-radius: var(--zen-radius);
+  overflow: hidden;
+  outline: none;
+}
+
+/* ── Built-in themes ──────────────────────────────────────────── */
+
+:host(.zen-slate) {
+  --zen-bg: #fdfdfd;
+  --zen-bg-alt: #f4f4f5;
+  --zen-header-bg: #e4e4e7;
+  --zen-header-fg: #27272a;
+  --zen-border: #d4d4d8;
+  --zen-accent: #0d9488;
+  --zen-accent-soft: #ccfbf1;
+  --zen-row-hover: #f4f4f5;
+  --zen-row-selected: #ccfbf1;
+}
+
+:host(.zen-carbon) {
+  --zen-bg: #ffffff;
+  --zen-bg-alt: #f4f4f4;
+  --zen-header-bg: #393939;
+  --zen-header-fg: #f4f4f4;
+  --zen-border: #c6c6c6;
+  --zen-accent: #0f62fe;
+  --zen-accent-soft: #d0e2ff;
+  --zen-row-hover: #e8e8e8;
+  --zen-row-selected: #d0e2ff;
+}
+
+/* ── Dark scheme (applies on top of any theme) ────────────────── */
+
+:host(.zen-scheme-dark) {
+  --zen-bg: #111827;
+  --zen-bg-alt: #1f2937;
+  --zen-fg: #e5e7eb;
+  --zen-fg-muted: #9ca3af;
+  --zen-border: #374151;
+  --zen-header-bg: #1f2937;
+  --zen-header-fg: #d1d5db;
+  --zen-row-hover: #1f2937;
+  --zen-row-selected: #1e3a8a;
+  --zen-accent-soft: #1e3a8a;
+  --zen-flash: #854d0e;
+  --zen-shadow: 0 4px 16px rgb(0 0 0 / 0.5);
+}
+
+/* ── Accessibility ────────────────────────────────────────────── */
+
+.zen-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+
+.zen-header {
+  flex: none;
+  background: var(--zen-header-bg);
+  color: var(--zen-header-fg);
+  border-bottom: 1px solid var(--zen-border);
+  user-select: none;
+  z-index: 3;
+}
+
+.zen-header-row {
+  display: flex;
+  align-items: stretch;
+}
+
+.zen-header-center-clip {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.zen-header-track {
+  position: relative;
+  height: 100%;
+  display: flex;
+  will-change: transform;
+}
+
+.zen-header-abs {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+.zen-header-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0 var(--zen-cell-padding-x);
+  box-sizing: border-box;
+  border-right: 1px solid var(--zen-border);
+  position: relative;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.zen-sortable {
+    cursor: pointer;
+  }
+}
+
+.zen-header-group {
+  justify-content: center;
+  font-weight: 700;
+}
+
+.zen-header-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zen-sort-indicator {
+  color: var(--zen-accent);
+  flex: none;
+}
+
+.zen-sort-priority {
+  font-size: 9px;
+}
+
+.zen-filter-button {
+  border: none;
+  background: transparent;
+  color: var(--zen-fg-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  flex: none;
+
+  &:hover {
+    background: var(--zen-accent-soft);
+  }
+
+  &.zen-filter-active {
+    color: var(--zen-accent);
+  }
+}
+
+.zen-resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 2;
+  touch-action: none;
+}
+
+/* ── Body layout ──────────────────────────────────────────────── */
+
+.zen-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+
+.zen-viewport {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  /* Its own compositing layer keeps scroll off the main paint path. */
+  contain: strict;
+}
+
+.zen-spacer {
+  position: relative;
+}
+
+.zen-canvas {
+  position: sticky;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.zen-pinned-col {
+  flex: none;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  background: var(--zen-bg);
+
+  > div {
+    will-change: transform;
+  }
+
+  .zen-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+}
+
+.zen-pinned-left {
+  border-right: 2px solid var(--zen-border);
+  box-shadow: 2px 0 4px rgb(0 0 0 / 0.06);
+}
+
+.zen-pinned-right {
+  border-left: 2px solid var(--zen-border);
+  box-shadow: -2px 0 4px rgb(0 0 0 / 0.06);
+}
+
+/* ── Rows ─────────────────────────────────────────────────────── */
+
+.zen-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--zen-border);
+  background: var(--zen-bg);
+  will-change: transform;
+
+  &.zen-row-hover {
+    background: var(--zen-row-hover);
+  }
+
+  &.zen-row-selected {
+    background: var(--zen-row-selected);
+  }
+
+  &.zen-row-group {
+    background: var(--zen-bg-alt);
+    font-weight: 600;
+  }
+}
+
+.zen-pinned-row {
+  position: relative;
+  flex: none;
+  z-index: 2;
+  background: var(--zen-bg-alt);
+  border-bottom: 2px solid var(--zen-border);
+}
+
+.zen-row-loading .zen-skeleton {
+  height: 60%;
+  margin: auto var(--zen-cell-padding-x);
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--zen-bg-alt) 25%, var(--zen-border) 50%, var(--zen-bg-alt) 75%);
+  background-size: 200% 100%;
+  animation: zen-shimmer 1.2s infinite;
+}
+
+@keyframes zen-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ── Cells ────────────────────────────────────────────────────── */
+
+.zen-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--zen-cell-padding-x);
+  box-sizing: border-box;
+  border-right: 1px solid transparent;
+  overflow: hidden;
+  white-space: nowrap;
+  outline: none;
+
+  &.zen-cell-abs {
+    position: absolute;
+    top: 0;
+  }
+
+  &.zen-cell-focused {
+    outline: var(--zen-focus-ring);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+
+  &.zen-cell-range {
+    background: var(--zen-accent-soft);
+  }
+
+  &.zen-cell-flash {
+    animation: zen-flash 0.9s ease-out;
+  }
+
+  &.zen-cell-editing {
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+@keyframes zen-flash {
+  0% { background: var(--zen-flash); }
+  100% { background: transparent; }
+}
+
+.zen-cell-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.zen-checkbox-cell {
+  justify-content: center;
+  padding: 0;
+}
+
+/* ── Editing ──────────────────────────────────────────────────── */
+
+.zen-default-editor {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--zen-accent);
+  padding: 0 calc(var(--zen-cell-padding-x) - 2px);
+  font: inherit;
+  color: inherit;
+  background: var(--zen-bg);
+  outline: none;
+
+  &.zen-editor-invalid {
+    border-color: var(--zen-error);
+  }
+}
+
+.zen-editor-host {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.zen-validation-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--zen-error);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 0 0 4px 4px;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+/* ── Groups / tree / detail ───────────────────────────────────── */
+
+.zen-group-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.zen-expand-button,
+.zen-detail-toggle {
+  border: none;
+  background: transparent;
+  color: var(--zen-fg-muted);
+  cursor: pointer;
+  font: inherit;
+  padding: 0 4px;
+
+  &:hover {
+    color: var(--zen-accent);
+  }
+}
+
+.zen-detail-toggle {
+  position: absolute;
+  left: 2px;
+  top: 4px;
+  z-index: 2;
+}
+
+.zen-group-aggs {
+  margin-left: auto;
+  padding-right: var(--zen-cell-padding-x);
+  color: var(--zen-fg-muted);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.zen-detail-row {
+  position: absolute;
+  left: 0;
+  background: var(--zen-bg-alt);
+  border-top: 1px dashed var(--zen-border);
+  box-sizing: border-box;
+  overflow: auto;
+  cursor: default;
+}
+
+.zen-fullwidth-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--zen-cell-padding-x);
+  box-sizing: border-box;
+}
+
+/* ── Popups ───────────────────────────────────────────────────── */
+
+.zen-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+}
+
+.zen-filter-popup,
+.zen-context-menu {
+  position: absolute;
+  z-index: 10;
+  background: var(--zen-bg);
+  color: var(--zen-fg);
+  border: 1px solid var(--zen-border);
+  border-radius: var(--zen-radius);
+  box-shadow: var(--zen-shadow);
+  padding: 8px;
+  min-width: 200px;
+}
+
+.zen-filter-operator,
+.zen-filter-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 6px;
+  padding: 5px 8px;
+  font: inherit;
+  color: inherit;
+  background: var(--zen-bg);
+  border: 1px solid var(--zen-border);
+  border-radius: 4px;
+}
+
+.zen-filter-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+
+  button {
+    font: inherit;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--zen-border);
+    background: var(--zen-bg);
+    color: var(--zen-fg);
+    cursor: pointer;
+
+    &.zen-primary {
+      background: var(--zen-accent);
+      border-color: var(--zen-accent);
+      color: #fff;
+    }
+  }
+}
+
+.zen-set-filter {
+  max-height: 240px;
+  overflow: auto;
+  margin-bottom: 6px;
+}
+
+.zen-set-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 2px;
+  cursor: pointer;
+}
+
+.zen-context-menu {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--zen-row-hover);
+    }
+
+    &:disabled {
+      color: var(--zen-fg-muted);
+      cursor: default;
+    }
+  }
+}
+
+/* ── Loading overlay ──────────────────────────────────────────── */
+
+.zen-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--zen-bg) 60%, transparent);
+  z-index: 8;
+  pointer-events: none;
+}
+
+.zen-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--zen-accent-soft);
+  border-top-color: var(--zen-accent);
+  border-radius: 50%;
+  animation: zen-spin 0.8s linear infinite;
+}
+
+@keyframes zen-spin {
+  to { transform: rotate(360deg); }
+}

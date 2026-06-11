@@ -1,0 +1,36 @@
+{
+  "name": "zen-grid-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "ng build zen-grid",
+    "build:prod": "ng build zen-grid --configuration production",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "pack": "npm run build:prod && cd dist/zen-grid && npm pack"
+  },
+  "dependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/compiler": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/platform-browser": "^19.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.6.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.0.0",
+    "@angular/animations": "^19.0.0",
+    "@angular/cli": "^19.0.0",
+    "@angular/compiler-cli": "^19.0.0",
+    "@angular/forms": "^19.0.0",
+    "@angular/platform-browser-dynamic": "^19.0.0",
+    "@angular/router": "^19.0.0",
+    "@testing-library/angular": "^17.3.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-preset-angular": "^14.4.0",
+    "ng-packagr": "^19.0.0",
+    "typescript": "~5.6.0"
+  }
+}

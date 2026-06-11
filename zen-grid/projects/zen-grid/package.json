@@ -1,0 +1,29 @@
+{
+  "name": "zen-grid",
+  "version": "1.0.0",
+  "description": "Production-grade, signal-native Angular data grid. Virtual scrolling, server-side row models, grouping, pivoting, editing, exporting — zero runtime dependencies beyond Angular.",
+  "keywords": [
+    "angular",
+    "grid",
+    "datagrid",
+    "data-table",
+    "virtual-scroll",
+    "signals",
+    "zoneless"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zikaoinfo/ngx-event-hub.git",
+    "directory": "zen-grid/projects/zen-grid"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=19.0.0",
+    "@angular/core": ">=19.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "dependencies": {
+    "tslib": "^2.6.0"
+  },
+  "sideEffects": false
+}
