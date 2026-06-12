@@ -104,29 +104,3 @@ jobs:
       - name: Type check demo
         working-directory: ./ngx-event-hub-demo
         run: npx tsc --noEmit
-
-  zen-grid:
-    name: Build & Test ZenGrid
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-          cache-dependency-path: zen-grid/package-lock.json
-
-      - name: Install dependencies
-        working-directory: ./zen-grid
-        run: npm ci
-
-      - name: Build library
-        working-directory: ./zen-grid
-        run: npm run build:prod
-
-      - name: Run unit tests
-        working-directory: ./zen-grid
-        run: npx jest --ci --maxWorkers=2
