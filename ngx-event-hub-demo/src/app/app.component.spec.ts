@@ -14,16 +14,21 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'ngx-event-hub-demo' title`, () => {
+  it('should start with the mobile menu closed', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ngx-event-hub-demo');
+    expect(app.isMobileMenuOpen).toBeFalse();
   });
 
-  it('should render title', () => {
+  it('should toggle and close the mobile menu', () => {
     const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, ngx-event-hub-demo');
+
+    app.toggleMobileMenu();
+    expect(app.isMobileMenuOpen).toBeTrue();
+
+    app.closeMobileMenu();
+    expect(app.isMobileMenuOpen).toBeFalse();
   });
 });
