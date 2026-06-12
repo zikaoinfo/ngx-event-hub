@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [23.x]
+        node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -31,6 +31,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: ngx-event-hub-lib/package-lock.json
     - name: Install lib Dependencies
       working-directory: ./ngx-event-hub-lib
       run: |
@@ -40,7 +41,7 @@ jobs:
       run: npm run build
     - name: Set npm registry
       run: npm config set registry https://registry.npmjs.org/
-  
+
     - name: publish lib
       working-directory: ./ngx-event-hub-lib/dist/ngx-event-hub
       run: npm publish
