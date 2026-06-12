@@ -32,8 +32,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           cache: 'npm'
+          cache-dependency-path: |
+            ngx-event-hub-lib/package-lock.json
+            ngx-event-hub-demo/package-lock.json
 
       - name: Install library dependencies
         working-directory: ./ngx-event-hub-lib
@@ -61,8 +64,8 @@ jobs:
         with:
           path: './ngx-event-hub-demo/dist/ngx-event-hub-demo/browser'
 
+      # Deploys on push to main and on manual workflow_dispatch runs
+      # (the workflow only triggers from those two events).
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
